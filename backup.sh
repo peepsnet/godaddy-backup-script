@@ -20,14 +20,14 @@
 #
 # Contributor(s):
 # Don Ellington 2017-04-08
-# Added 
+# Added self-numbering Database variable
 #
 # ***** END LICENSE BLOCK *****
 
 ###################### Configuration ######################
 
 #Store the backups in the following directory
-#Note: Always backup your data outside of your public_html or html directory. This will ensure your backup files won't be accessed publicly from a browser.
+#Note: Always backup your data **outside of your public_html or html directory**. This will ensure your backup files won't be accessed publicly from a browser.
 #Example:
 #backupDirectory="backup/mybackupfiles"
 backupDirectory="backups"
@@ -37,45 +37,42 @@ backupDirectory="backups"
 #You can add as much databases information as you wish
 #The database information should be incremental and follow the below format:
 #############
-#dbHost[0]=''
-#dbName[0]=''
-#dbUser[0]=''
-#dbPass[0]=''
+# dbHost[$x]=''
+# dbName[$x]=''
+# dbUser[$x]=''
+# dbPass[$x]=''
 #
-#dbHost[1]=''
-#dbName[1]=''
-#dbUser[1]=''
-#dbPass[1]=''
+# dbHost[$x]=''
+# dbName[$x]=''
+# dbUser[$x]=''
+# dbPass[$x]=''
 #
-#dbHost[2]=''
-#dbName[2]=''
-#dbUser[2]=''
-#dbPass[2]=''
+# dbHost[$x]=''
+# dbName[$x]=''
+# dbUser[$x]=''
+# dbPass[$x]=''
 #############
 #
 #
 #Example:
 ##################################
-#dbHost[0]='localhost'
-#dbName[0]='database1'
-#dbUser[0]='user'
-#dbPass[0]='myhardtoguesspassword'
-#
-#dbHost[1]='db.domain.com'
-#dbName[1]='database1'
-#dbUser[1]='myusername'
-#dbPass[1]='ghjkkjh2678(27'
+# dbHost[$x]='localhost'
+# dbName[$x]='database1'
+# dbUser[$x]='user'
+# dbPass[$x]='myhardtoguesspassword'
+# db=$((db+1))
+
+# dbHost[$x]='db.domain.com'
+# dbName[$x]='database1'
+# dbUser[$x]='myusername'
+# dbPass[$x]='ghjkkjh2678(27'
 ##################################
 
 dbHost[0]='localhost' 
-dbName[0]='stsMagentoStoreDB' 
-dbUser[0]='stsStoreManager'
-dbPass[0]='I8@homeB4'
+dbName[0]='MyStoreDB' 
+dbUser[0]='MyStoreUSer'
+dbPass[0]='MyStoreDBPass'
 
-dbHost[1]='localhost' 
-dbName[1]='phppos'
-dbUser[1]='stsStoreManager'
-dbPass[1]='I8@homeB4'
 
 #Compress Databases (On=1 / Off=0)
 compressDatabases=1
@@ -83,18 +80,18 @@ compressDatabases=1
 ##### Files Configuration #####
 #$HOME should by default hold the path of your user home directory, in case it doesn't, or if you want to backup a specific directory, you can define it below:
 #HOME="/var/www"
-HOME="/home/peepsnetdon1us"
+HOME="/home/myusername"
 
 #Directory (and its subdirectories) to backup. By Default, the godaddy public directory is called "html" or "public_html"
 filesPath='public_html'
 
-#Directories to exclude so they are not backed up(relative to backup path above)
+#Directories to exclude so they are not backed up(relative to backup path above). No leading slash
 #excludeDirs[0]='junk.html'
 #excludeDirs[1]='logs/*'
 #excludeDirs[2]='cgi-bin/*'
 
-excludeDirs[0]='sts/var/cache/*'
-excludeDirs[1]='sts/var/session/*'
+excludeDirs[0]='var/cache/*'
+excludeDirs[1]='var/session/*'
 
 #Archive files as Zip(0) or Tar(1)
 ZipOrTar=1
