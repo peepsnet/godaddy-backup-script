@@ -37,12 +37,14 @@ HOME="/home/godaddyusername"
 backupDirectory="sitebackup/backups/site"
 
 #Directorys (and its subdirectories) to backup. By Default, the godaddy public directory is called "html" or "public_html"
-#Names of folders/files are relitive to HOME variable above.
+#Names of folders/files are relitive to HOME path above.
+#NO leading slashes
 backupFoldersFiles[0]='public_html'
 backupFoldersFiles[1]='private_html'
 
-#Directories to exclude so they are not backed up(relative to backup path above)
-#Folder/File names are relitive to HOME variable above.
+#Directories to exclude so they are not backed up
+#Folder/File names are relitive to HOME path above.
+#NO leading slashes
 #excludeDirs[0]='public_html/junk.html'
 #excludeDirs[1]='public_html/logs/*'
 #excludeDirs[2]='public_html/cgi-bin/*'
