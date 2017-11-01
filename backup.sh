@@ -32,9 +32,10 @@ HOME="/home/godaddyusername"
 #Store the backups in the following directory
 #Note: Always backup your data outside of your public_html or html directory.
 #This will ensure your backup files won't be accessed publicly from a browser.
+#Name of this folder is relitive to HOME path above.
 #Example:
 #backupDirectory="backup/mybackupfiles"
-backupDirectory="sitebackup/backups/site"
+backupDirectory="siteBackup/site"
 
 #Directorys (and its subdirectories) to backup. By Default, the godaddy public directory is called "html" or "public_html"
 #Names of folders/files are relitive to HOME path above.
