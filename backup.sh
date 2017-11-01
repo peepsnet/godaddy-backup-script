@@ -19,81 +19,35 @@
 # the Initial Developer. All Rights Reserved.
 #
 # Contributor(s):
-# Don Ellington 2017-04-08
-# Added self-numbering Database variable
 #
 # ***** END LICENSE BLOCK *****
 
 ###################### Configuration ######################
 
-#Store the backups in the following directory
-#Note: Always backup your data **outside of your public_html or html directory**. This will ensure your backup files won't be accessed publicly from a browser.
-#Example:
-#backupDirectory="backup/mybackupfiles"
-backupDirectory="backups"
-
-##### Database Configuration #####
-#Databases Information
-#You can add as much databases information as you wish
-#The database information should be incremental and follow the below format:
-#############
-# dbHost[$x]=''
-# dbName[$x]=''
-# dbUser[$x]=''
-# dbPass[$x]=''
-#
-# dbHost[$x]=''
-# dbName[$x]=''
-# dbUser[$x]=''
-# dbPass[$x]=''
-#
-# dbHost[$x]=''
-# dbName[$x]=''
-# dbUser[$x]=''
-# dbPass[$x]=''
-#############
-#
-#
-#Example:
-##################################
-# dbHost[$x]='localhost'
-# dbName[$x]='database1'
-# dbUser[$x]='user'
-# dbPass[$x]='myhardtoguesspassword'
-# db=$((db+1))
-
-# dbHost[$x]='db.domain.com'
-# dbName[$x]='database1'
-# dbUser[$x]='myusername'
-# dbPass[$x]='ghjkkjh2678(27'
-##################################
-
-dbHost[0]='localhost' 
-dbName[0]='MyStoreDB' 
-dbUser[0]='MyStoreUSer'
-dbPass[0]='MyStoreDBPass'
-
-
-#Compress Databases (On=1 / Off=0)
-compressDatabases=1
-
 ##### Files Configuration #####
 #$HOME should by default hold the path of your user home directory, in case it doesn't, or if you want to backup a specific directory, you can define it below:
 #HOME="/var/www"
-HOME="/home/myusername"
+HOME="/home/godaddyusername"
 
-#Directory (and its subdirectories) to backup. By Default, the godaddy public directory is called "html" or "public_html"
-filesPath='public_html'
+#Store the backups in the following directory
+#Note: Always backup your data outside of your public_html or html directory.
+#This will ensure your backup files won't be accessed publicly from a browser.
+#Example:
+#backupDirectory="backup/mybackupfiles"
+backupDirectory="sitebackup/backups/site"
 
-#Directories to exclude so they are not backed up(relative to backup path above). No leading slash
-#excludeDirs[0]='junk.html'
-#excludeDirs[1]='logs/*'
-#excludeDirs[2]='cgi-bin/*'
+#Directorys (and its subdirectories) to backup. By Default, the godaddy public directory is called "html" or "public_html"
+#Names of folders/files are relitive to HOME variable above.
+backupFoldersFiles[0]='public_html'
+backupFoldersFiles[1]='private_html'
 
-excludeDirs[0]='var/cache/*'
-excludeDirs[1]='var/session/*'
+#Directories to exclude so they are not backed up(relative to backup path above)
+#Folder/File names are relitive to HOME variable above.
+#excludeDirs[0]='public_html/junk.html'
+#excludeDirs[1]='public_html/logs/*'
+#excludeDirs[2]='public_html/cgi-bin/*'
 
-#Archive files as Zip(0) or Tar(1)
+#Archive files as Zip(0) or Tar(1) or OFF(2) to turn off Folder/File backup
 ZipOrTar=1
 
 #Compress Files in Archive? (On=1, Off=0)
@@ -102,6 +56,40 @@ compressFiles=1
 
 #How many days should the backup remain locally before it's deleted. Set to 0 to disable it.
 deleteLocalOldBackupsAfter=30
+
+##### Database Configuration #####
+#Databases Information
+#You can add as much databases information as you wish
+#The database information should be incremental and follow the below format:
+#############
+# db=0
+# dbHost[$db]=''
+# dbName[$db]=''
+# dbUser[$db]=''
+# dbPass[$db]=''
+# db=$((db+1))
+
+# dbHost[$db]=''
+# dbName[$db]=''
+# dbUser[$db]=''
+# dbPass[$db]=''
+# db=$((db+1))
+#############
+#
+#
+#Example:
+############### Copy Below here for each DB ######################
+# dbHost[$db]='localhost'
+# dbName[$db]='database1'
+# dbUser[$db]='user'
+# dbPass[$db]='myhardtoguesspassword'
+# db=$((db+1))
+############### Copy Upto Here ##################
+
+db=0 #Start counter at 0
+
+#Compress Databases (On=1 / Off=0)
+compressDatabases=1
 
 ##### FTP Configuration #####
 #Note: Using FTP is not secure, use it at your own risk. Your password will be stored in this file in plain text, and can be read by a simple ps command upon execution by others.
@@ -118,7 +106,7 @@ deleteOldBackupsAfter=30
 FtpHost=''
 
 #FTP Port
-FtpPort=''
+FtpPort='8021'
 
 #FTP User
 FtpUser=''
@@ -127,15 +115,16 @@ FtpUser=''
 FtpPass=''
 
 #FTP Path
-FtpPath='/'
+FtpPath=''
 
 ################# End Of Configuration ###################
 
 ################# Bash Color and Format Codes ###################
 
-parm="*"
+parm="***"
 err="####"
 att="+++"
+
 if [ -t 1 ]; then
 	BOLD=$(tput bold)
 	STOT=$(tput smso)
@@ -148,7 +137,6 @@ if [ -t 1 ]; then
 	WHITE=$(tput setaf 7)
 	NORM=$(tput sgr0)
 	NORMAL=$(tput sgr0)
-
 else
 	BOLD=" "
 	STOT=" "
@@ -161,8 +149,8 @@ else
 	WHITE=" "
 	NORM=" "
 	NORMAL=" "
-
 fi
+
 
 ################# Bash Color and Format Codes ###################
 
@@ -204,38 +192,45 @@ do
       filename[i]="$HOME/$thisBackupDirectory/${dbName[$i]}_$Date.sql"
       mysqldump -h ${dbHost[$i]} -u ${dbUser[$i]} -p${dbPass[$i]} ${dbName[$i]} > ${filename[i]}
   fi
-  echo -e "Backup of $dbName[$1] complete."
+  echo -e "Backup of ${dbName[$i]} complete."
+  echo -e " "
 done
 ##### END OF Backup Databases #####
 
 ##### Backup Files #####
 echo ""
-echo -e "${BOLD}Begining backup of files at $HOME/$filesPath${NORM}"
-echo -e "Moving into backup path: $HOME/$filesPath"
-cd $HOME/$filesPath
+echo -e "${BOLD}Begining backup of files at $HOME${NORM}"
+echo -e "Moving into backup path: $HOME"
+cd $HOME
 
 #Zip
 if [ $ZipOrTar -eq 0 ]
 then
 	echo -e "Building Zip command."
-	for x in ${!excludeDirs[@]}
+
+    for x in ${!backupFoldersFiles[@]}
+    do
+        backupPaths+=" ${backupFoldersFiles[$x]}"
+    done
+
+	for y in ${!excludeDirs[@]}
 	do
-		excludeVar+=" ${excludeDirs[$x]}\*"
+        excludeVar+=" ${excludeDirs[$y]}\*"
 	done
 	excludeVar=" -x $excludeVar"
     if [ $compressFiles -eq 0 ]
     then
         filesname="$HOME/$thisBackupDirectory/files_$Date.zip"
 		echo "Running Zip Command:"
-		echo "zip -r -0 $filesname * $excludeVar "
-#		read -p "Press [Enter] key to start backup..."
-        zip -r -0 $filesname * $excludeVar
+		echo "zip -r -0 $filesname $backupPaths $excludeVar "
+		read -p "Press [Enter] key to start backup..."
+        zip -r -0 $filesname $backupPaths $excludeVar
     else
         filesname="$HOME/$thisBackupDirectory/files_$Date.zip"
 		echo "Running Zip Command with compression:"
-		echo "zip -r -9 $filesname * $excludeVar "
-#		read -p "Press [Enter] key to start backup..."
-		zip -r -9 $filesname * $excludeVar
+		echo "zip -r -9 $filesname $backupPaths $excludeVar "
+		read -p "Press [Enter] key to start backup..."
+		zip -r -9 $filesname $backupPaths $excludeVar
     fi
 fi
 
@@ -243,23 +238,28 @@ fi
 if [ $ZipOrTar -eq 1 ]
 then
 	echo -e "Building Tar command."
-	for x in ${!excludeDirs[@]}
+    for x in ${!backupFoldersFiles[@]}
+    do
+        backupPaths+=" ${backupFoldersFiles[$x]}"
+    done
+
+	for y in ${!excludeDirs[@]}
 	do
-		excludeVar+=" --exclude=./${excludeDirs[$x]}"
+		excludeVar+=" --exclude=./${excludeDirs[$y]}"
 	done
     if [ $compressFiles -eq 0 ]
     then
         filesname="$HOME/$thisBackupDirectory/files_$Date.tar"
 		echo "Running Tar Command:"
-		echo "tar $excludeVar -pcf $filesname . "
-#		read -p "Press [Enter] key to start backup..."
-		tar $excludeVar -pcf $filesname . 
+		echo "tar $excludeVar -pcf $filesname $backupPaths "
+		read -p "Press [Enter] key to start backup..."
+		tar $excludeVar -pcf $filesname $backupPaths 
     else
         filesname="$HOME/$thisBackupDirectory/files_$Date.tar.gz"
 		echo "Running Tar Command with compression:"
-		echo "tar $excludeVar -pzcf $filesname . "
-#		read -p "Press [Enter] key to start backup..."
-		tar $excludeVar -pzcf $filesname . 
+		echo "tar $excludeVar -pzcf $filesname $backupPaths "
+		read -p "Press [Enter] key to start backup..."
+		tar $excludeVar -pzcf $filesname $backupPaths
     fi
 fi
 echo -e "${BOLD}Backing up of files complete.${NORM}"
